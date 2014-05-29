@@ -18,13 +18,14 @@ namespace Calculator
 		public static Operation mod = new Operation().addNames("%", "mod", "остаток от деления").setPriority(1).setOperation((a, b) => a % b);
 		public static Operation pow = new Operation().addNames("^", "встепени").setPriority(2).setOperation((a, b) => (decimal) Math.Pow((double) a, (double) b));
 
+		public static Operation addUnary = new Operation().addNames("+").setPriority(0).setOperation((decimal a, decimal b) => +b).setUnary(true);
 		public static Operation subUnary = new Operation().addNames("-").setPriority(0).setOperation((decimal a, decimal b) => -b).setUnary(true);
 		public static Operation sin = new Operation().addNames("sin", "синус").setOperation((a, b) => (decimal) Math.Sin((double) b)).setUnary(true);
 		public static Operation cos = new Operation().addNames("cos", "косинус").setOperation((a, b) => (decimal) Math.Cos((double) b)).setUnary(true);
 		public static Operation tg = new Operation().addNames("tg", "тангенс").setOperation((a, b) => (decimal) Math.Tan((double) b)).setUnary(true);
 		public static Operation ctg = new Operation().addNames("ctg", "котангенс").setOperation((a, b) => 1 / ((decimal) Math.Tan((double) b))).setUnary(true);
 
-		public Operation[] operations = { add, sub, multi, div, mod, pow, subUnary, sin, cos, tg, ctg };
+		public Operation[] operations = { add, sub, multi, div, mod, pow, addUnary, subUnary, sin, cos, tg, ctg };
 
 		enum TypePart
 		{
@@ -120,11 +121,16 @@ namespace Calculator
 				{
 					Operation operation;
 					if (i == 0 || partsType[i - 1] == TypePart.OPERATION)
+					{
 						operation = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.isUnary);
+						priorities[operation.priority].Insert(0, i);
+					}
 					else
+					{
 						operation = getFromAllOperations(op => op.names.Contains(partsString[i]) && !op.isUnary);
-					int priority = operation.priority;
-					priorities[priority].Add(i);
+						priorities[operation.priority].Add(i);
+					}
+					//priorities[operation.priority].Add(i);
 				}
 				order.Add(i);
 			}

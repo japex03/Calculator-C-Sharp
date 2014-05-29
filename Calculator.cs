@@ -18,13 +18,13 @@ namespace Calculator
 		public static Operation mod = new Operation().addNames("%", "mod", "остаток от деления").setPriority(1).setOperation((a, b) => a % b);
 		public static Operation pow = new Operation().addNames("^", "встепени").setPriority(2).setOperation((a, b) => (decimal) Math.Pow((double) a, (double) b));
 
-		//public static Operation subUnary = new Operation().addNames("-").setPriority(0).setOperation((decimal a, decimal b) => -a).setUnary(true);
+		public static Operation subUnary = new Operation().addNames("-").setPriority(0).setOperation((decimal a, decimal b) => -b).setUnary(true);
 		public static Operation sin = new Operation().addNames("sin", "синус").setOperation((a, b) => (decimal) Math.Sin((double) b)).setUnary(true);
 		public static Operation cos = new Operation().addNames("cos", "косинус").setOperation((a, b) => (decimal) Math.Cos((double) b)).setUnary(true);
 		public static Operation tg = new Operation().addNames("tg", "тангенс").setOperation((a, b) => (decimal) Math.Tan((double) b)).setUnary(true);
 		public static Operation ctg = new Operation().addNames("ctg", "котангенс").setOperation((a, b) => 1 / ((decimal) Math.Tan((double) b))).setUnary(true);
 
-		public Operation[] operations = { add, sub, multi, div, mod, pow, sin, cos, tg, ctg };
+		public Operation[] operations = { add, sub, multi, div, mod, pow, subUnary, sin, cos, tg, ctg };
 
 		enum TypePart
 		{
@@ -118,7 +118,12 @@ namespace Calculator
 			{
 				if (partsType[i] == TypePart.OPERATION)
 				{
-					int priority = getOperationFromStart(partsString[i]).priority;
+					Operation operation;
+					if (i == 0 || partsType[i - 1] == TypePart.OPERATION)
+						operation = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.isUnary);
+					else
+						operation = getFromAllOperations(op => op.names.Contains(partsString[i]) && !op.isUnary);
+					int priority = operation.priority;
 					priorities[priority].Add(i);
 				}
 				order.Add(i);
@@ -130,9 +135,10 @@ namespace Calculator
 				{
 					int index = priorities[i][j];
 					int indexOperation = order.FindIndex(x => x == index);
-					Operation operation = getOperationFromStart(partsString[index]);
+					//Operation operation = getOperationFromStart(partsString[index]);
 					if (index == 0 || partsType[index - 1] == TypePart.OPERATION)
 					{
+						Operation operation = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.isUnary);
 						if (!operation.isUnary && operation != Calculator.sub)
 							throw new Exception();
 						partsNumber[index] = operation.opeartion(0.0M, partsNumber[order[indexOperation + 1]]);
@@ -140,6 +146,7 @@ namespace Calculator
 					}
 					else
 					{
+						Operation operation = getFromAllOperations(op => op.names.Contains(partsString[index]) && !op.isUnary);
 						if (operation.isUnary)
 							throw new Exception();
 						int indexPrevOperation = order[indexOperation - 1];
@@ -179,17 +186,15 @@ namespace Calculator
 			return 0;
 		}
 
-		private Operation getFromAllOperations(string p)
+		public delegate bool check(Operation operation);
+
+		private Operation getFromAllOperations(check check)
 		{
 			for (int i = 0; i < operations.Length; i++)
 			{
-				for (int j = 0; j < operations[i].names.Count; j++)
+				if (check(operations[i]))
 				{
-					string name = operations[i].names[j];
-					if (p.StartsWith(name))
-					{
-						return operations[i];
-					}
+					return operations[i];
 				}
 			}
 			return null;

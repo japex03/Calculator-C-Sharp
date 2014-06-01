@@ -41,13 +41,8 @@ namespace Calculator
 						brackEnd = i;
 						string inBracketQuestion = question.Substring(brackStart + 1, brackEnd - brackStart - 1);
 						string inBracketAnswer = " " + new SimpleCalculator().calculate(inBracketQuestion) + " ";
-						//Console.Write("|{0}| ", question);
 						question = question.Remove(brackStart, brackEnd - brackStart + 1);
-						//Console.Write("|{0}| ", question);
 						question = question.Insert(brackStart, inBracketAnswer);
-						//Console.Write("|{0}| ", question);
-
-						//Console.WriteLine("|{0}|", inBracketAnswer);
 						break;
 					}
 				}

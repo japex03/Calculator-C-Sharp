@@ -20,7 +20,6 @@ namespace Calculator
 
 			Stopwatch stopWatch = new Stopwatch();
 			stopWatch.Start();
-			//new Program().generate();
 			new Program().run();
 			stopWatch.Stop();
 
@@ -41,7 +40,7 @@ namespace Calculator
 
 		private void run()
 		{
-			//	Потом пользовательский ввод
+			//	Пользовательский ввод
 			using (StreamReader input = new StreamReader("input.txt"))
 			{
 				while (!input.EndOfStream)
@@ -64,13 +63,6 @@ namespace Calculator
 		{
 			if (!Directory.Exists(unitTestPath))
 				return;
-
-			//Process currentProcess = Process.GetCurrentProcess();
-			//currentProcess.StartInfo.UseShellExecute = false;
-			//currentProcess.StartInfo.RedirectStandardInput = true;
-			//currentProcess.StartInfo.RedirectStandardOutput = true;
-			//currentProcess.StandardInput = input;
-			//currentProcess.StandardOutput = output;
 
 			int i = 1;
 			while (File.Exists(unitTestPath + i + ".in"))

@@ -29,6 +29,7 @@ namespace Calculator
 			Console.WriteLine("ОК {0} мс", ts / 1000.0);
 			Console.ReadKey();
 
+			//	Создаем новые тесты на основе пользовательчкого ввода
 			for (int i = 0; i < question.Count; i++)
 				createUnitTest(question[i], answer[i]);
 		}

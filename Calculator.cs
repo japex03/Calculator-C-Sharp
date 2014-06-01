@@ -12,15 +12,21 @@ namespace Calculator
 		public const int MAX_PRIORITY = 6;
 		public const decimal EPSILON = 0.0000001M;
 
-		public decimal ans = 0.0M;
+		public static Constant pi = new Constant().setNames("PI", "числоПи", "ПИ").setValue((decimal) Math.PI);
+		public static Constant[] constants = { pi };
 
-		public Calculator()
-		{
-			Math.Round(5.0);
-		}
+		public decimal ans = 0.0M;
 
 		public decimal calculate(string question)
 		{
+			for (int i = 0; i < constants.Length; i++)
+			{
+				for (int j = 0; j < constants[i].names.Length; j++)
+				{
+					question = question.Replace(constants[i].names[j], constants[i].value.ToString());
+				}
+			}
+
 			question = question.Replace(" ", "");
 			question = question.Replace('.', ',');
 			question = '(' + question + ')';

@@ -10,7 +10,7 @@ namespace Calculator
 	{
 
 		public const int MAX_PRIORITY = 6;
-		public const decimal EPSILON = 0.00000001M;
+		public const decimal EPSILON = 0.0000001M;
 
 		public decimal ans = 0.0M;
 

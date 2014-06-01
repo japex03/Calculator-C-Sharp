@@ -78,11 +78,11 @@ namespace Calculator
 				StreamReader inputAnswer = new StreamReader(unitTestPath + i + ".out");
 
 				string question = inputQuestion.ReadLine();
-				string answer = inputAnswer.ReadLine();
+				decimal answer = decimal.Parse(inputAnswer.ReadLine());
 
-				string answer1 = calculator.calculate(question).ToString();
+				decimal answer1 = calculator.calculate(question);
 				Console.Write("{0} = {1} ", question, answer);
-				if (answer == answer1)
+				if (Math.Abs(answer - answer1) < Calculator.EPSILON)
 					Console.WriteLine("ОК");
 				else
 				{

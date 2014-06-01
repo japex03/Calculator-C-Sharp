@@ -10,14 +10,14 @@ namespace Calculator
 	{
 
 		// + - * / mod pow
-		public static Operation add = new Operation().addNames("+", "плюс").setPriority(2).setOperation((a, b) => a + b);
-		public static Operation sub = new Operation().addNames("-", "минус").setPriority(2).setOperation((a, b) => a - b);
-		public static Operation multi = new Operation().addNames("*", "умножить").setPriority(1).setOperation((a, b) => a * b);
-		public static Operation div = new Operation().addNames("/", "разделить").setPriority(1).setOperation((a, b) => a / b);
-		public static Operation mod = new Operation().addNames("%", "mod", "остаток от деления").setPriority(1).setOperation((a, b) => a % b);
-		public static Operation pow = new Operation().addNames("^", "встепени").setPriority(2).setOperation((a, b) => (decimal) Math.Pow((double) a, (double) b));
+		public static Operation add = new Operation().addNames("+", "плюс").setPriority(2).setOperation((a, b) => a + b).setBinary();
+		public static Operation sub = new Operation().addNames("-", "минус").setPriority(2).setOperation((a, b) => a - b).setBinary();
+		public static Operation multi = new Operation().addNames("*", "умножить").setPriority(1).setOperation((a, b) => a * b).setBinary();
+		public static Operation div = new Operation().addNames("/", "разделить").setPriority(1).setOperation((a, b) => a / b).setBinary();
+		public static Operation mod = new Operation().addNames("%", "mod", "остаток от деления").setPriority(1).setOperation((a, b) => a % b).setBinary();
+		public static Operation pow = new Operation().addNames("^", "встепени").setPriority(2).setOperation((a, b) => (decimal) Math.Pow((double) a, (double) b)).setBinary();
 
-		// + - log ln abs, round, sign, sqrt, sqr, factorial
+		// + - log ln abs round sign sqrt sqr factorial
 		public static Operation addUnary = new Operation().addNames("+").setPriority(0).setOperation((decimal a, decimal b) => +b).setUnary();
 		public static Operation subUnary = new Operation().addNames("-").setPriority(0).setOperation((decimal a, decimal b) => -b).setUnary();
 		public static Operation log = new Operation().addNames("log", "десятичныйЛогарифм").setOperation((a, b) => (decimal) Math.Log10((double) b)).setUnary();
@@ -39,7 +39,7 @@ namespace Calculator
 			}
 		).setPostUnary();
 
-		// sin cos tg ctg asin acos atg actg, sinh, cosh, tgh, ctgh
+		// sin cos tg ctg asin acos atg actg sinh cosh tgh ctgh
 		public static Operation sin = new Operation().addNames("sin", "синус").setOperation((a, b) => (decimal) Math.Sin((double) b)).setUnary();
 		public static Operation cos = new Operation().addNames("cos", "косинус").setOperation((a, b) => (decimal) Math.Cos((double) b)).setUnary();
 		public static Operation tg = new Operation().addNames("tg", "тангенс").setOperation((a, b) => (decimal) Math.Tan((double) b)).setUnary();

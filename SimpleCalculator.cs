@@ -38,17 +38,9 @@ namespace Calculator
 
 			List<string> partsString = question.Split(' ').ToList();
 			List<decimal> partsNumber = new List<decimal>();
-			List<TypePart> partsType = new List<TypePart>();
+			List<Operation> partsOperation = new List<Operation>();
 			List<int> partsOrder = new List<int>();
 			int partsCount = partsString.Count;
-
-			for (int i = 0; i < partsCount; i++)
-			{
-				decimal x = 0.0M;
-				partsType.Add(decimal.TryParse(partsString[i], out x) ? TypePart.NUMBER : TypePart.OPERATION);
-				partsNumber.Add(x);
-				partsOrder.Add(i);
-			}
 
 			List<List<int>> priorities = new List<List<int>>(Calculator.MAX_PRIORITY);
 			for (int i = 0; i < Calculator.MAX_PRIORITY; i++)
@@ -58,30 +50,35 @@ namespace Calculator
 
 			for (int i = 0; i < partsCount; i++)
 			{
-				if (partsType[i] == TypePart.OPERATION)
+				decimal x = 0.0M;
+				if (!decimal.TryParse(partsString[i], out x))
 				{
 					Operation operationUnary = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.IsUnary);
 					Operation operationPostUnary = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.IsPostUnary);
-					Operation operationBinary = getFromAllOperations(op => op.names.Contains(partsString[i]) && !(op.IsUnary || op.IsPostUnary));
+					Operation operationBinary = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.IsBinary);
 
-					if (operationUnary != null && ((operationPostUnary == null && operationBinary == null) || i == 0 || partsType[i - 1] == TypePart.OPERATION_BINARY || partsType[i - 1] == TypePart.OPERATION_UNARY))
+					if (operationUnary != null && ((operationPostUnary == null && operationBinary == null) || i == 0 || (partsOperation[i - 1] != null && (partsOperation[i - 1].IsBinary || partsOperation[i - 1].IsUnary))))
 					{
 						priorities[operationUnary.priority].Insert(0, i);
-						partsType[i] = TypePart.OPERATION_UNARY;
+						partsOperation.Add(operationUnary);
 					}
-					else if (operationBinary != null && ((operationUnary == null && operationPostUnary == null) || (partsType[i - 1] == TypePart.NUMBER || partsType[i - 1] == TypePart.OPERATION_POST_UNARY)))
+					else if (operationBinary != null && ((operationUnary == null && operationPostUnary == null) || (partsOperation[i - 1] == null || partsOperation[i - 1].IsPostUnary)))
 					{
 						priorities[operationBinary.priority].Add(i);
-						partsType[i] = TypePart.OPERATION_BINARY;
+						partsOperation.Add(operationBinary);
 					}
-					else if (operationPostUnary != null && ((operationUnary == null && operationBinary == null) || partsType[i - 1] == TypePart.NUMBER || partsType[i - 1] == TypePart.OPERATION_POST_UNARY))
+					else if (operationPostUnary != null && ((operationUnary == null && operationBinary == null) || partsOperation[i - 1] == null || partsOperation[i - 1].IsPostUnary))
 					{
 						priorities[operationPostUnary.priority].Insert(0, i);
-						partsType[i] = TypePart.OPERATION_POST_UNARY;
+						partsOperation.Add(operationPostUnary);
 					}
 					else
 						throw new Exception();
 				}
+				else
+					partsOperation.Add(null);
+				partsNumber.Add(x);
+				partsOrder.Add(i);
 			}
 
 
@@ -92,21 +89,21 @@ namespace Calculator
 				{
 					int index = priorities[i][j];
 					int indexOperation = partsOrder.FindIndex(x => x == index);
-					if (partsType[index] == TypePart.OPERATION_UNARY)
+					if (partsOperation[index].IsUnary)
 					{
 						Operation operationUnary = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.IsUnary);
 						partsNumber[index] = operationUnary.operation(0, partsNumber[partsOrder[indexOperation + 1]]);
 						partsOrder.RemoveAt(indexOperation + 1);
 					}
-					else if (partsType[index] == TypePart.OPERATION_POST_UNARY)
+					else if (partsOperation[index].IsPostUnary)
 					{
 						Operation operationPostUnary = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.IsPostUnary);
 						partsNumber[index] = operationPostUnary.operation(partsNumber[partsOrder[indexOperation - 1]], 0);
 						partsOrder.RemoveAt(indexOperation - 1);
 					}
-					else if (partsType[index] == TypePart.OPERATION_BINARY)
+					else if (partsOperation[index].IsBinary)
 					{
-						Operation operationBinary = getFromAllOperations(op => op.names.Contains(partsString[index]) && !op.IsUnary);
+						Operation operationBinary = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.IsBinary);
 						int indexPrevOperation = partsOrder[indexOperation - 1];
 						int indexNextOperation = partsOrder[indexOperation + 1];
 						partsNumber[index] = operationBinary.operation(partsNumber[indexPrevOperation], partsNumber[indexNextOperation]);
@@ -146,22 +143,6 @@ namespace Calculator
 				if (check(Operation.operations[i]))
 				{
 					return Operation.operations[i];
-				}
-			}
-			return null;
-		}
-
-		private Operation getOperationFromStart(string p)
-		{
-			for (int i = 0; i < Operation.operations.Length; i++)
-			{
-				for (int j = 0; j < Operation.operations[i].names.Count; j++)
-				{
-					string name = Operation.operations[i].names[j];
-					if (p.StartsWith(name))
-					{
-						return Operation.operations[i];
-					}
 				}
 			}
 			return null;

@@ -10,15 +10,6 @@ namespace Calculator
 	class SimpleCalculator
 	{
 
-		enum TypePart
-		{
-			OPERATION,
-			OPERATION_BINARY,
-			OPERATION_UNARY,
-			OPERATION_POST_UNARY,
-			NUMBER
-		}
-
 		public string calculate(string question)
 		{
 			for (int i = 0; i < question.Length; i++)

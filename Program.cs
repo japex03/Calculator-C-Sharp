@@ -12,20 +12,19 @@ namespace Calculator
 	{
 		static void Main(string[] args)
 		{
+			new Program().start();
+		}
+
+		public void start()
+		{
 			calculator = new Calculator();
 
 			//	Вначале юнит тесты
-			Program.unitTests();
-			Console.Write("\n\n------------\nИтого все тесты: {0}\n\n", allIsGood ? "ОК" : "ПЛОХО");
+			runAndDisplayTime(Program.unitTests);
+			Console.WriteLine();
 
-			Stopwatch stopWatch = new Stopwatch();
-			stopWatch.Start();
-			new Program().run();
-			stopWatch.Stop();
-
-			long frequency = Stopwatch.Frequency;
-			long ts = 1000000L * stopWatch.ElapsedTicks / frequency;
-			Console.WriteLine("ОК {0} мс", ts / 1000.0);
+			//	Потом ользовательский ввод
+			runAndDisplayTime(this.run);
 			Console.ReadKey();
 
 			//	Создаем новые тесты на основе пользовательчкого ввода
@@ -33,8 +32,19 @@ namespace Calculator
 				createUnitTest(question[i], answer[i]);
 		}
 
+		private void runAndDisplayTime(Action action)
+		{
+			Stopwatch stopWatch = new Stopwatch();
+			stopWatch.Start();
+			action();
+			stopWatch.Stop();
+
+			long frequency = Stopwatch.Frequency;
+			long ts = 1000000L * stopWatch.ElapsedTicks / frequency;
+			Console.WriteLine("ОК {0} мс", ts / 1000.0);
+		}
+
 		public static Calculator calculator;
-		public static bool allIsGood = true;
 		public static List<string> question = new List<string>();
 		public static List<decimal> answer = new List<decimal>();
 
@@ -64,6 +74,7 @@ namespace Calculator
 			if (!Directory.Exists(unitTestPath))
 				return;
 
+			bool allIsGood = true;
 			int i = 1;
 			while (File.Exists(unitTestPath + i + ".in"))
 			{
@@ -85,6 +96,7 @@ namespace Calculator
 
 				i++;
 			}
+			Console.Write("\n------------\nИтого все тесты: {0}\n", allIsGood ? "ОК" : "ПЛОХО");
 		}
 
 		private static void createUnitTest(string question, decimal answer)

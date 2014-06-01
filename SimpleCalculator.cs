@@ -41,8 +41,16 @@ namespace Calculator
 
 			for (int i = 0; i < partsCount; i++)
 			{
-				decimal x = 0.0M;
-				if (!decimal.TryParse(partsString[i], out x))
+				decimal x;
+				bool f = decimal.TryParse(partsString[i], out x);
+				if (!f)
+				{
+					double x1;
+					f = double.TryParse(partsString[i], out x1);
+					x = (decimal) x1;
+				}
+
+				if (!f)
 				{
 					Operation operationUnary = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.IsUnary);
 					Operation operationPostUnary = getFromAllOperations(op => op.names.Contains(partsString[i]) && op.IsPostUnary);

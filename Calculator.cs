@@ -34,7 +34,7 @@ namespace Calculator
 			};
 			foreach (string answerName in answerNames)
 			{
-				question = question.Replace(answerName, this.ans.ToString());
+				question = question.Replace(answerName, " " + this.ans.ToString() + " ");
 			}
 
 			question = question.Replace('.', ',');

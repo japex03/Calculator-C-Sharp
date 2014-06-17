@@ -14,15 +14,15 @@ namespace Calculator
 		public static Operation sub = new Operation().addNames("-", "минус").setPriority(2).setOperation((a, b) => a - b).setBinary();
 		public static Operation multi = new Operation().addNames("*", "умножить").setPriority(1).setOperation((a, b) => a * b).setBinary();
 		public static Operation div = new Operation().addNames("/", "разделить").setPriority(1).setOperation((a, b) => a / b).setBinary();
-		public static Operation mod = new Operation().addNames("%", "mod", "остатокОтДеления").setPriority(1).setOperation((a, b) => a % b).setBinary();
-		public static Operation wholeDiv = new Operation().addNames("div", "целаяЧастьОтДеления").setPriority(1).setOperation((a, b) => Math.Floor(a / b)).setBinary();
+		public static Operation mod = new Operation().addNames("%", "mod", "остатокотделения").setPriority(1).setOperation((a, b) => a % b).setBinary();
+		public static Operation wholeDiv = new Operation().addNames("div", "целаячастьотделения").setPriority(1).setOperation((a, b) => Math.Floor(a / b)).setBinary();
 		public static Operation pow = new Operation().addNames("^", "встепени").setPriority(2).setOperation((a, b) => (decimal) Math.Pow((double) a, (double) b)).setBinary();
 
 		// + - log ln abs round sign sqrt sqr factorial
 		public static Operation addUnary = new Operation().addNames("+").setPriority(0).setOperation((decimal a, decimal b) => +b).setUnary();
 		public static Operation subUnary = new Operation().addNames("-").setPriority(0).setOperation((decimal a, decimal b) => -b).setUnary();
-		public static Operation log = new Operation().addNames("log", "десятичныйЛогарифм").setOperation((a, b) => (decimal) Math.Log10((double) b)).setUnary();
-		public static Operation ln = new Operation().addNames("ln", "натуральныйЛогарифм").setOperation((a, b) => (decimal) Math.Log((double) b)).setUnary();
+		public static Operation log = new Operation().addNames("log", "десятичныйлогарифм").setOperation((a, b) => (decimal) Math.Log10((double) b)).setUnary();
+		public static Operation ln = new Operation().addNames("ln", "натуральныйлогарифм").setOperation((a, b) => (decimal) Math.Log((double) b)).setUnary();
 		public static Operation abs = new Operation().addNames("abs", "модуль").setOperation((a, b) => (decimal) Math.Abs((double) b)).setUnary();
 		public static Operation round = new Operation().addNames("round", "округлить").setOperation((a, b) => (decimal) Math.Round(b)).setUnary();
 		public static Operation sign = new Operation().addNames("sign", "знак").setOperation((a, b) => (decimal) Math.Sign((double) b)).setUnary();

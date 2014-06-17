@@ -68,7 +68,7 @@ namespace Calculator
 					}
 					else if (operationPostUnary != null && ((operationUnary == null && operationBinary == null) || partsOperation[i - 1] == null || partsOperation[i - 1].IsPostUnary))
 					{
-						priorities[operationPostUnary.priority].Insert(0, i);
+						priorities[operationPostUnary.priority].Add(i);
 						partsOperation.Add(operationPostUnary);
 					}
 					else

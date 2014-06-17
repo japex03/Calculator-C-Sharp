@@ -20,7 +20,7 @@ namespace Calculator
 			calculator = new Calculator();
 
 			//	Вначале юнит тесты
-			runAndDisplayTime(Program.unitTests);
+			runAndDisplayTime(Program.Tests);
 			Console.WriteLine();
 
 			//	Потом ользовательский ввод
@@ -29,7 +29,7 @@ namespace Calculator
 
 			//	Создаем новые тесты на основе пользовательчкого ввода
 			for (int i = 0; i < question.Count; i++)
-				createUnitTest(question[i], answer[i]);
+				createTests(question[i], answer[i]);
 		}
 
 		private void runAndDisplayTime(Action action)
@@ -67,25 +67,25 @@ namespace Calculator
 			}
 		}
 
-		public const string unitTestPath = "UnitTests/";
+		public const string TestPath = "Tests/";
 
-		private static void unitTests()
+		private static void Tests()
 		{
-			if (!Directory.Exists(unitTestPath))
+			if (!Directory.Exists(TestPath))
 				return;
 
 			bool allIsGood = true;
 			int i = 1;
-			while (File.Exists(unitTestPath + i + ".in"))
+			while (File.Exists(TestPath + i + ".in"))
 			{
-				StreamReader inputQuestion = new StreamReader(unitTestPath + i + ".in");
-				StreamReader inputAnswer = new StreamReader(unitTestPath + i + ".out");
+				StreamReader inputQuestion = new StreamReader(TestPath + i + ".in");
+				StreamReader inputAnswer = new StreamReader(TestPath + i + ".out");
 
 				string question = inputQuestion.ReadLine();
 				decimal answer = decimal.Parse(inputAnswer.ReadLine());
 
 				decimal answer1 = calculator.calculate(question);
-				Console.Write("{0} = {1} ", question, answer);
+				Console.Write("Тест {0}: {1} = {2} ", i, question, answer);
 				if (Math.Abs(answer - answer1) < Calculator.EPSILON)
 					Console.WriteLine("ОК");
 				else
@@ -99,20 +99,20 @@ namespace Calculator
 			Console.Write("\n------------\nИтого все тесты: {0}\n", allIsGood ? "ОК" : "ПЛОХО");
 		}
 
-		private static void createUnitTest(string question, decimal answer)
+		private static void createTests(string question, decimal answer)
 		{
 			string pathIn;
 			string pathOut;
 
 			int i = 1;
-			if (!Directory.Exists(unitTestPath))
-				Directory.CreateDirectory(unitTestPath);
+			if (!Directory.Exists(TestPath))
+				Directory.CreateDirectory(TestPath);
 			else
 			{
-				while (File.Exists(unitTestPath + i + ".in"))
+				while (File.Exists(TestPath + i + ".in"))
 				{
-					pathIn = unitTestPath + i + ".in";
-					pathOut = unitTestPath + i + ".out";
+					pathIn = TestPath + i + ".in";
+					pathOut = TestPath + i + ".out";
 
 					string questionI, answerI;
 					using (StreamReader input = new StreamReader(pathIn))
@@ -127,8 +127,8 @@ namespace Calculator
 				}
 			}
 
-			pathIn = unitTestPath + i + ".in";
-			pathOut = unitTestPath + i + ".out";
+			pathIn = TestPath + i + ".in";
+			pathOut = TestPath + i + ".out";
 
 			using (StreamWriter output = new StreamWriter(pathIn))
 				output.Write(question);

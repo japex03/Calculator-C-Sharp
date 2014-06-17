@@ -9,12 +9,13 @@ namespace Calculator
 	public class Operation
 	{
 
-		// + - * / mod pow
+		// + - * / mod div pow
 		public static Operation add = new Operation().addNames("+", "плюс").setPriority(2).setOperation((a, b) => a + b).setBinary();
 		public static Operation sub = new Operation().addNames("-", "минус").setPriority(2).setOperation((a, b) => a - b).setBinary();
 		public static Operation multi = new Operation().addNames("*", "умножить").setPriority(1).setOperation((a, b) => a * b).setBinary();
 		public static Operation div = new Operation().addNames("/", "разделить").setPriority(1).setOperation((a, b) => a / b).setBinary();
-		public static Operation mod = new Operation().addNames("%", "mod", "остаток от деления").setPriority(1).setOperation((a, b) => a % b).setBinary();
+		public static Operation mod = new Operation().addNames("%", "mod", "остатокОтДеления").setPriority(1).setOperation((a, b) => a % b).setBinary();
+		public static Operation wholeDiv = new Operation().addNames("div", "целаяЧастьОтДеления").setPriority(1).setOperation((a, b) => Math.Floor(a / b)).setBinary();
 		public static Operation pow = new Operation().addNames("^", "встепени").setPriority(2).setOperation((a, b) => (decimal) Math.Pow((double) a, (double) b)).setBinary();
 
 		// + - log ln abs round sign sqrt sqr factorial
@@ -54,7 +55,7 @@ namespace Calculator
 		public static Operation ctgh = new Operation().addNames("ctgh", "гиперболический котангенс").setOperation((a, b) => 1 / ((decimal) Math.Tanh((double) b))).setUnary();
 
 		public static Operation[] operations =	{
-													add, sub, multi, div, mod, pow, 
+													add, sub, multi, div, mod, wholeDiv, pow, 
 													addUnary, subUnary, log, ln, abs, round, sign, sqrt, sqr, factorial, 
 													sin, cos, tg, ctg, aSin, aCos, aTg, aCtg, sinh, cosh, tgh, ctgh
 												};

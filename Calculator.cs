@@ -27,7 +27,6 @@ namespace Calculator
 				}
 			}
 
-			question = question.Replace(" ", "");
 			question = question.Replace('.', ',');
 			question = '(' + question + ')';
 

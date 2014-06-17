@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Calculator
 {
 
-	class Constant
+	public class Constant
 	{
 		public string[] names;
 		public decimal value;

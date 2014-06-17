@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Calculator
 {
 
-	class SimpleCalculator
+	public class SimpleCalculator
 	{
 
 		public string calculate(string question)
@@ -90,19 +90,19 @@ namespace Calculator
 					int indexOperation = partsOrder.FindIndex(x => x == index);
 					if (partsOperation[index].IsUnary)
 					{
-						Operation operationUnary = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.IsUnary);
+						Operation operationUnary = partsOperation[index];
 						partsNumber[index] = operationUnary.operation(0, partsNumber[partsOrder[indexOperation + 1]]);
 						partsOrder.RemoveAt(indexOperation + 1);
 					}
 					else if (partsOperation[index].IsPostUnary)
 					{
-						Operation operationPostUnary = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.IsPostUnary);
+						Operation operationPostUnary = partsOperation[index];
 						partsNumber[index] = operationPostUnary.operation(partsNumber[partsOrder[indexOperation - 1]], 0);
 						partsOrder.RemoveAt(indexOperation - 1);
 					}
 					else if (partsOperation[index].IsBinary)
 					{
-						Operation operationBinary = getFromAllOperations(op => op.names.Contains(partsString[index]) && op.IsBinary);
+						Operation operationBinary = partsOperation[index];
 						int indexPrevOperation = partsOrder[indexOperation - 1];
 						int indexNextOperation = partsOrder[indexOperation + 1];
 						partsNumber[index] = operationBinary.operation(partsNumber[indexPrevOperation], partsNumber[indexNextOperation]);

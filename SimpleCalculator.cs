@@ -90,22 +90,19 @@ namespace Calculator
 					int indexOperation = partsOrder.FindIndex(x => x == index);
 					if (partsOperation[index].IsUnary)
 					{
-						Operation operationUnary = partsOperation[index];
-						partsNumber[index] = operationUnary.operation(0, partsNumber[partsOrder[indexOperation + 1]]);
+						partsNumber[index] = partsOperation[index].operation(0, partsNumber[partsOrder[indexOperation + 1]]);
 						partsOrder.RemoveAt(indexOperation + 1);
 					}
 					else if (partsOperation[index].IsPostUnary)
 					{
-						Operation operationPostUnary = partsOperation[index];
-						partsNumber[index] = operationPostUnary.operation(partsNumber[partsOrder[indexOperation - 1]], 0);
+						partsNumber[index] = partsOperation[index].operation(partsNumber[partsOrder[indexOperation - 1]], 0);
 						partsOrder.RemoveAt(indexOperation - 1);
 					}
 					else if (partsOperation[index].IsBinary)
 					{
-						Operation operationBinary = partsOperation[index];
 						int indexPrevOperation = partsOrder[indexOperation - 1];
 						int indexNextOperation = partsOrder[indexOperation + 1];
-						partsNumber[index] = operationBinary.operation(partsNumber[indexPrevOperation], partsNumber[indexNextOperation]);
+						partsNumber[index] = partsOperation[index].operation(partsNumber[indexPrevOperation], partsNumber[indexNextOperation]);
 						partsOrder.RemoveAt(indexOperation + 1);
 						partsOrder.RemoveAt(indexOperation - 1);
 					}
